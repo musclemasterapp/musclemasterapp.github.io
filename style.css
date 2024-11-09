@@ -18,6 +18,10 @@ body {
   padding-bottom: 10px;
 }
 
+.btn.active {
+  background-color: #0074ff !important;
+}
+
 .btn:hover {
   background-color: #0b1324;
   border: 1px solid #334155;
@@ -32,13 +36,23 @@ body {
   background-color: #1e8950;
 }
 
+#start-quiz {
+  background-color: #0074ff;
+  border: 1px solid #0074ff;
+}
+
+#start-quiz:hover {
+  background-color: #0f172a;
+  color: #0074ff;
+}
+
 #next-question-btn {
-  background-color: #724efa;
+  background-color: #0074ff;
   font-weight: 600;
 }
 
 #next-question-btn:hover {
-  background-color: #5f38ff;
+  background-color: #0065d8;
 }
 
 .quiz-card {

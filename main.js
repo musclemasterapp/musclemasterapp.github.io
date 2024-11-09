@@ -2,7 +2,7 @@ let currentQuestion = {};
 let selectedBones = [];
 let score = 0;
 let questionCount = 0;
-const totalQuestions = 10;
+const totalQuestions = 2;
 
 document.getElementById("start-quiz").addEventListener("click", startQuiz);
 document.getElementById("restart-quiz").addEventListener("click", restartQuiz);
@@ -49,6 +49,7 @@ function updateScore() {
 
 function updateQuestionCounter() {
   document.getElementById("question-number").textContent = questionCount;
+  document.getElementById("total-question-number").textContent = totalQuestions;
 }
 
 function getRandomBones(correctBones) {
@@ -96,13 +97,13 @@ function submitAnswer() {
     selectedBones.sort().join(",") ===
     currentQuestion.correctBones.sort().join(",");
   if (isCorrect) {
-    feedback.className = "alert alert-success";
-    feedback.textContent = "Correct!";
+    feedback.className = "alert alert-success text-center";
+    feedback.innerHTML = "Correct!";
     score++;
     updateScore();
   } else {
-    feedback.className = "alert alert-danger";
-    feedback.textContent = `Incorrect. The correct bone(s) are: ${currentQuestion.correctBones.join(
+    feedback.className = "alert alert-danger text-center";
+    feedback.innerHTML = `Incorrect! <br> Correct answer: ${currentQuestion.correctBones.join(
       ", "
     )}`;
   }
