@@ -2,7 +2,7 @@ let currentQuestion = {};
 let selectedBones = [];
 let score = 0;
 let questionCount = 0;
-const totalQuestions = 2;
+const totalQuestions = 10;
 
 document.getElementById("start-quiz").addEventListener("click", startQuiz);
 document.getElementById("restart-quiz").addEventListener("click", restartQuiz);
