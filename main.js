@@ -2,7 +2,7 @@ let currentQuestion = {};
 let selectedBones = [];
 let score = 0;
 let questionCount = 0;
-const totalQuestions = 10;
+const totalQuestions = 3;
 
 document.getElementById("start-quiz").addEventListener("click", startQuiz);
 document.getElementById("restart-quiz").addEventListener("click", restartQuiz);
@@ -53,12 +53,27 @@ function updateQuestionCounter() {
 }
 
 function getRandomBones(correctBones) {
+  // Determine the region of the correct bones
+  const correctRegion = findRegion(correctBones[0]); // Assume all correct bones are in the same region
+  const regionBones = bones[correctRegion];
+
+  // Generate distractors from the same region
   let randomBones = new Set(correctBones);
   while (randomBones.size < 5) {
-    const randomBone = bones[Math.floor(Math.random() * bones.length)];
+    const randomBone =
+      regionBones[Math.floor(Math.random() * regionBones.length)];
     randomBones.add(randomBone);
   }
+
   return Array.from(randomBones);
+}
+
+function findRegion(bone) {
+  for (const [region, boneList] of Object.entries(bones)) {
+    if (boneList.includes(bone)) {
+      return region;
+    }
+  }
 }
 
 function displayBoneOptions(boneOptions, correctBones) {
@@ -85,34 +100,44 @@ function selectAnswer(boneButton, bone) {
 }
 
 function submitAnswer() {
-  if (selectedBones.length === 0) {
-    alert("Please select at least one answer!");
-    return;
-  }
-
   const feedback = document.getElementById("feedback");
   feedback.classList.remove("d-none");
 
-  const isCorrect =
-    selectedBones.sort().join(",") ===
-    currentQuestion.correctBones.sort().join(",");
-  if (isCorrect) {
-    feedback.className = "alert alert-success text-center";
-    feedback.innerHTML = "Correct!";
-    score++;
-    updateScore();
-  } else {
-    feedback.className = "alert alert-danger text-center";
-    feedback.innerHTML = `Incorrect! <br> Correct answer: ${currentQuestion.correctBones.join(
+  if (selectedBones.length === 0) {
+    // Case when the user skips the question
+    feedback.className = "alert alert-warning text-center"; // Different styling for skipped (optional)
+    feedback.innerHTML = `Skipped! <br> Correct answer: ${currentQuestion.correctBones.join(
       ", "
     )}`;
+  } else {
+    // Case when the user provides an answer
+    const isCorrect =
+      selectedBones.sort().join(",") ===
+      currentQuestion.correctBones.sort().join(",");
+    if (isCorrect) {
+      feedback.className = "alert alert-success text-center";
+      feedback.innerHTML = "Correct!";
+      score++;
+      updateScore();
+    } else {
+      feedback.className = "alert alert-danger text-center";
+      feedback.innerHTML = `Incorrect! <br> Correct answer: ${currentQuestion.correctBones.join(
+        ", "
+      )}`;
+    }
   }
 
   document.getElementById("submit-btn").disabled = true;
   document.getElementById("next-question-btn").classList.remove("d-none");
 
   if (questionCount === totalQuestions) {
-    endQuiz();
+    // Change "Next Question" to "Finish" on the last question
+    const nextButton = document.getElementById("next-question-btn");
+    nextButton.classList.remove("d-none");
+    nextButton.textContent = "Finish";
+    nextButton.onclick = endQuiz; // Set the button to end the quiz
+  } else {
+    document.getElementById("next-question-btn").classList.remove("d-none");
   }
 }
 
@@ -131,6 +156,7 @@ function endQuiz() {
 }
 
 function restartQuiz() {
-  document.getElementById("end-screen").classList.add("d-none");
-  document.getElementById("start-screen").classList.remove("d-none");
+  //document.getElementById("end-screen").classList.add("d-none");
+  //document.getElementById("start-screen").classList.remove("d-none");
+  location.reload();
 }
